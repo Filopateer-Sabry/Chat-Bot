@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chatbot Assistant Landing Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+</head>
+<body class="min-h-screen font-poppins bg-cover bg-center bg-no-repeat opacity-85" style="background-image: url('https://images.unsplash.com/photo-1543722530-d2c3201371e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 w-full bg-zinc-900/80 backdrop-blur-md z-50 border-b border-indigo-500/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3 animate-text-gradient">
+        <img src="https://img.icons8.com/?size=100&id=13679&format=png" alt="AI Logo" class="w-8 h-8 sm:w-10 sm:h-10"/>
+        <h1 class="text-xl sm:text-2xl font-bold">AI Chatbot</h1>
+      </div>
+      <div class="md:hidden">
+        <button id="menuToggle" class="text-white focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+          </svg>
+        </button>
+      </div>
+      <ul id="navMenu" class="hidden md:flex gap-4 lg:gap-6 text-white text-base lg:text-lg bg-zinc-900/90 md:bg-transparent p-4 md:p-0 absolute md:static top-16 left-0 w-full md:w-auto border-t border-indigo-500/20 md:border-0">
+        <li><a href="#home" class="block font-bold px-3 py-2 rounded-lg hover:bg-indigo-600 hover:text-white transition-all duration-300 animate-border-gradient mb-3 md:mb-0">Home</a></li>
+        <li><a href="#about" class="block font-bold px-3 py-2 rounded-lg hover:bg-indigo-600 hover:text-white transition-all duration-300 animate-border-gradient mb-3 md:mb-0">About</a></li>
+        <li><a href="#code" class="block font-bold px-3 py-2 rounded-lg hover:bg-indigo-600 hover:text-white transition-all duration-300 animate-border-gradient mb-3 md:mb-0">Code</a></li>
+        <li><a href="#video" class="block font-bold px-3 py-2 rounded-lg hover:bg-indigo-600 hover:text-white transition-all duration-300 animate-border-gradient mb-3 md:mb-0">Video</a></li>
+        <li><a href="#team" class="block font-bold px-3 py-2 rounded-lg hover:bg-indigo-600 hover:text-white transition-all duration-300 animate-border-gradient mb-3 md:mb-0">Team</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="min-h-screen flex items-center justify-center px-4">
+    <div class="text-center text-white max-w-3xl animate-bounce-in">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">Welcome to Our AI Chatbot</h1>
+      <p class="text-base sm:text-lg md:text-xl mb-8">Experience the future of communication with our intelligent and responsive chatbot, built with cutting-edge AI technology.</p>
+      <a href="#chatbot" class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-6 sm:py-3 sm:px-8 rounded-xl animate-pulse-button">Try Chatbot</a>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-16 sm:py-20 bg-zinc-900/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center text-white mb-12 animate-text-gradient">About the Project</h2>
+      <p class="text-base sm:text-lg text-gray-300 text-center max-w-3xl mx-auto animate-bounce-in">
+        Our AI Chatbot is designed to provide seamless and intelligent conversations. Powered by advanced algorithms, it understands user queries and delivers accurate responses in real-time. Perfect for customer support, education, and more!
+      </p>
+    </div>
+  </section>
+
+  <!-- Code Section -->
+  <section id="code" class="py-16 sm:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center text-white mb-12 animate-text-gradient">Our Code</h2>
+      <div class="bg-zinc-800 p-4 sm:p-6 rounded-2xl shadow-2xl animate-pulse-slow">
+        <pre class="text-gray-300 text-xs sm:text-sm overflow-x-auto"><code>
+            <b>
+                from flask import Flask, request, jsonify, render_template
+                from flask_cors import CORS
+                import cohere
+                
+                app = Flask(__name__)
+                CORS(app)
+                
+                co = cohere.Client("lQa4OIvkZPgz59dtqewJSJdDn9Q5ilG98ZCqmZuz") 
+                
+                @app.route('/', methods=['GET'])
+                def home():
+                    return render_template("index.html") 
+                
+                @app.route('/chat', methods=['POST'])
+                def chat():
+                    data = request.get_json()
+                    message = data.get("message", "")
+                
+                    if not message:
+                        return jsonify({"error": "No message provided."}), 400
+                
+                    try:
+                        response = co.chat(message=message)
+                        return jsonify({"response": response.text})
+                    except Exception as e:
+                        return jsonify({"error": str(e)}), 500
+                    
+                if __name__ == '__main__':
+                    app.run(debug=True)
+            </b>
+        </code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Section -->
+  <section id="video" class="py-16 sm:py-20 bg-zinc-900/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center text-white mb-12 animate-text-gradient">Watch Our Demo</h2>
+      <div class="flex justify-center animate-bounce-in">
+        <video controls class="w-full max-w-3xl rounded-2xl shadow-2xl" poster="https://via.placeholder.com/800x450">
+          <source src="" type="video/mp4"/>
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section id="team" class="py-16 sm:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center text-white mb-12 animate-text-gradient">Meet Our Team</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
+        <div class="relative group bg-zinc-800 rounded-2xl p-4 sm:p-6 text-center text-white animate-pulse-slow">
+          <img src="https://via.placeholder.com/150" alt="Team Member" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4"/>
+          <h3 class="text-lg sm:text-xl font-semibold">Tarek Magdy</h3>
+          <button class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-300">View Profile</button>
+        </div>
+        <div class="relative group bg-zinc-800 rounded-2xl p-4 sm:p-6 text-center text-white animate-pulse-slow">
+          <img src="https://via.placeholder.com/150" alt="Team Member" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4"/>
+          <h3 class="text-lg sm:text-xl font-semibold">Ziad Gomaa</h3>
+          <button class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-300">View Profile</button>
+        </div>
+        <div class="relative group bg-zinc-800 rounded-2xl p-4 sm:p-6 text-center text-white animate-pulse-slow">
+          <img src="https://via.placeholder.com/150" alt="Team Member" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4"/>
+          <h3 class="text-lg sm:text-xl font-semibold">Amr Khaled</h3>
+          <button class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-300">View Profile</button>
+        </div>
+        <div class="relative group bg-zinc-800 rounded-2xl p-4 sm:p-6 text-center text-white animate-pulse-slow">
+          <img src="https://via.placeholder.com/150" alt="Team Member" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4"/>
+          <h3 class="text-lg sm:text-xl font-semibold">Filopater Sabry</h3>
+          <button class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-300">View Profile</button>
+        </div>
+        <div class="relative group bg-zinc-800 rounded-2xl p-4 sm:p-6 text-center text-white animate-pulse-slow">
+          <img src="https://via.placeholder.com/150" alt="Team Member" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4"/>
+          <h3 class="text-lg sm:text-xl font-semibold"></h3>
+          <button class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-300">View Profile</button>
+        </div>
+        <div class="relative group bg-zinc-800 rounded-2xl p-4 sm:p-6 text-center text-white animate-pulse-slow">
+          <img src="https://via.placeholder.com/150" alt="Team Member" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4"/>
+          <h3 class="text-lg sm:text-xl font-semibold"></h3>
+          <button class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-300">View Profile</button>
+        </div>
+        <div class="relative group bg-zinc-800 rounded-2xl p-4 sm:p-6 text-center text-white animate-pulse-slow">
+          <img src="https://via.placeholder.com/150" alt="Team Member" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4"/>
+          <h3 class="text-lg sm:text-xl font-semibold"></h3>
+          <button class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-300">View Profile</button>
+        </div>
+        <div class="relative group bg-zinc-800 rounded-2xl p-4 sm:p-6 text-center text-white animate-pulse-slow">
+          <img src="https://via.placeholder.com/150" alt="Team Member" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4"/>
+          <h3 class="text-lg sm:text-xl font-semibold"></h3>
+          <button class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-300">View Profile</button>
+        </div>
+        <div class="relative group bg-zinc-800 rounded-2xl p-4 sm:p-6 text-center text-white animate-pulse-slow">
+          <img src="https://via.placeholder.com/150" alt="Team Member" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4"/>
+          <h3 class="text-lg sm:text-xl font-semibold"></h3>
+          <button class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-300">View Profile</button>
+        </div>
+        <div class="relative group bg-zinc-800 rounded-2xl p-4 sm:p-6 text-center text-white animate-pulse-slow">
+          <img src="https://via.placeholder.com/150" alt="Team Member" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4"/>
+          <h3 class="text-lg sm:text-xl font-semibold"></h3>
+          <button class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-300">View Profile</button>
+        </div>
+        <div class="relative group bg-zinc-800 rounded-2xl p-4 sm:p-6 text-center text-white animate-pulse-slow">
+          <img src="https://via.placeholder.com/150" alt="Team Member" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4"/>
+          <h3 class="text-lg sm:text-xl font-semibold"></h3>
+          <button class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-300">View Profile</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chatbot Section -->
+  <section id="chatbot" class="py-16 sm:py-20 bg-zinc-900/80 hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center text-white mb-12 animate-text-gradient">Try Our Chatbot</h2>
+      <div class="max-w-[90%] sm:max-w-[80%] w-full bg-zinc-900 shadow-2xl rounded-2xl overflow-hidden h-[70vh] sm:h-[80vh] border-4 border-transparent animate-border-gradient mx-auto">
+        <div class="flex flex-col h-full">
+          <div class="px-4 sm:px-6 py-4 border-b border-indigo-500/20 bg-gradient-to-r from-indigo-600 to-purple-600">
+            <div class="flex justify-between items-center">
+              <h2 class="text-lg sm:text-xl font-semibold animate-text-gradient">Chatbot Assistant</h2>
+              <div class="bg-yellow-300 text-black text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full animate-pulse">Online</div>
+            </div>
+          </div>
+          <div id="chatDisplay" class="flex-1 p-4 sm:p-6 overflow-y-auto flex flex-col space-y-4 bg-zinc-800 animate-pulse-slow">
+            <div class="chat-message self-end bg-indigo-600 text-white max-w-xs sm:max-w-sm rounded-2xl px-3 sm:px-4 py-2 text-sm sm:text-base shadow-md animate-bounce-in">
+              Hello! How can I assist you today?
+            </div>
+          </div>
+          <div class="px-4 sm:px-6 py-4 border-t border-indigo-500/20 bg-zinc-900">
+            <div class="flex gap-2 sm:gap-3">
+              <input
+                id="chatInput"
+                type="text"
+                placeholder="Type your message..."
+                class="flex-1 p-2 sm:p-3 rounded-xl bg-zinc-700 dark:bg-zinc-800 dark:text-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 animate-border-gradient"
+              />
+              <button
+                id="sendButton"
+                onclick="sendMessage()"
+                class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-xl animate-border-gradient animate-pulse-button text-sm sm:text-base"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-6 bg-zinc-900 text-center text-gray-400">
+    <p>© 2025 AI Chatbot Team. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Toggle Mobile Menu
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('hidden');
+    });
+
+    // Toggle Chatbot Section
+    document.querySelector('a[href="#chatbot"]').addEventListener('click', (e) => {
+      e.preventDefault();
+      const chatbotSection = document.getElementById('chatbot');
+      chatbotSection.classList.toggle('hidden');
+      if (!chatbotSection.classList.contains('hidden')) {
+        chatbotSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    // Chatbot Functionality
+    function appendMessage(content, type = 'user') {
+      const chatDisplay = document.getElementById('chatDisplay');
+      const alignment = type === 'user' ? 'self-start bg-blue-300 text-black animate-bounce-in' : 
+                        type === 'bot' ? 'self-end bg-indigo-600 text-white animate-bounce-in' : 
+                        'self-end bg-red-500 text-white animate-bounce-in';
+
+      chatDisplay.innerHTML += `
+        <div class="chat-message ${alignment} max-w-xs sm:max-w-sm rounded-2xl px-3 sm:px-4 py-2 text-sm sm:text-base shadow-md">
+          ${content}
+        </div>`;
+      chatDisplay.scrollTop = chatDisplay.scrollHeight;
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const userMessage = input.value.trim();
+      if (!userMessage) {
+        appendMessage('Please enter a message!', 'error');
+        return;
+      }
+
+      appendMessage(`You: ${userMessage}`, 'user');
+      input.value = '';
+
+      fetch('/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: userMessage })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}, Status Text: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.response) {
+          appendMessage(`Bot: ${data.response}`, 'bot');
+        } else {
+          appendMessage(`Error: ${data.error || 'No response'}`, 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Fetch Error:', error);
+        appendMessage('Connection error. Please try again later.', 'error');
+      });
+    }
+
+    document.getElementById('chatInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+  </script>
+
+  <style>
+    .animate-border-gradient {
+      position: relative;
+      border: 2px solid transparent;
+      background: linear-gradient(45deg, #6366f1, #a855f7, #ec4899, #3b82f6);
+      background-size: 400%;
+      animation: gradientShift 5s ease infinite;
+      border-radius: 0.5rem;
+    }
+    .animate-border-gradient::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #6366f1, #a855f7, #ec4899, #3b82f6);
+      background-size: 400%;
+      animation: gradientShift 5s ease infinite;
+      z-index: -1;
+      border-radius: 0.5rem;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .animate-text-gradient {
+      background: linear-gradient(45deg, #ffffff, #a855f7, #ec4899, #3b82f6);
+      background-size: 400%;
+      animation: gradientShift 5s ease infinite;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .animate-bounce-in {
+      animation: bounceIn 0.5s ease-out;
+    }
+    @keyframes bounceIn {
+      0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+      50% { transform: scale(1.1); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-pulse-slow {
+      animation: pulseSlow 3s infinite;
+    }
+    @keyframes pulseSlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+    }
+    .animate-pulse-button {
+      animation: pulseButton 2s infinite;
+    }
+    @keyframes pulseButton {
+      0% { box-shadow: 0 0 0 rgba(99, 102, 241, 0.4); }
+      50% { box-shadow: 0 0 10px rgba(99, 102, 241, 0.6); }
+      100% { box-shadow: 0 0 0 rgba(99, 102, 241, 0.4); }
+    }
+    .font-poppins {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</body>
+</html>
